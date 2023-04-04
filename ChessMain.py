@@ -26,6 +26,9 @@ def main():
     clock = pygame.time.Clock()
     gs = ChessEngine.GameState()
     loadImages()
+    validMoves = gs.getValidMoves()
+    moveMade = False
+
     running = True
     selectedSquare = () # keep track of last click of user (row, col)
     playerClicks = [] # keep track of player clicks (two tuples: [(6, 4), (4, 4)])
@@ -47,10 +50,23 @@ def main():
                
                 if len(playerClicks) == 2: # if it is second click
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                    gs.makeMove(move)
-                    selectedSquare = ()
-                    playerClicks = []
-            
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
+                        selectedSquare = ()
+                        playerClicks = []
+                    else:
+                        playerClicks = [selectedSquare]
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_z:
+                    gs.undoMove()
+                    moveMade = True
+        
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
+
         clock.tick(MAX_FPS)
         drawBoard(screen)
         drawPieces(screen, gs.board)
