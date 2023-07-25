@@ -26,7 +26,7 @@ def main():
     clock = pygame.time.Clock()
     gs = ChessEngine.GameState()
     loadImages()
-    validMoves = gs.getValidMoves()
+    validMoves = gs.getValidMovesAdvanced()
     moveMade = False
 
     running = True
@@ -64,7 +64,7 @@ def main():
                     moveMade = True
         
         if moveMade:
-            validMoves = gs.getValidMoves()
+            validMoves = gs.getValidMovesAdvanced()
             moveMade = False
 
         clock.tick(MAX_FPS)
