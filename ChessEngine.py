@@ -266,11 +266,11 @@ class GameState():
                     moves.append(Move((row, col), (row+1, col), self.board))
                     if row == 1 and self.board[row+2][col] == '--':
                         moves.append(Move((row, col), (row+2, col), self.board))
-            if col > 1:
+            if col -1 >= 0:
                 if self.board[row+1][col-1][0] == 'w':
                     if not piecePinned or pinDirection == (1, -1):
                         moves.append(Move((row, col), (row+1, col-1), self.board))
-            if col < 6:
+            if col + 1 <= 7:
                 if self.board[row+1][col+1][0] == 'w':
                     if not piecePinned or pinDirection == (1, 1):
                         moves.append(Move((row, col), (row+1, col+1), self.board))
