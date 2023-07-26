@@ -50,12 +50,13 @@ def main():
                
                 if len(playerClicks) == 2: # if it is second click
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                    if move in validMoves:
-                        gs.makeMove(move)
-                        moveMade = True
-                        selectedSquare = ()
-                        playerClicks = []
-                    else:
+                    for i in range(len(validMoves)):
+                        if move == validMoves[i]:
+                            gs.makeMove(validMoves[i])
+                            moveMade = True
+                            selectedSquare = ()
+                            playerClicks = []
+                    if not moveMade:
                         playerClicks = [selectedSquare]
 
             elif event.type == pygame.KEYDOWN:
