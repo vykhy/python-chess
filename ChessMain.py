@@ -29,6 +29,7 @@ def main():
     validMoves = gs.getValidMovesAdvanced()
     moveMade = False
     animate = True
+    gameOver = False
 
     running = True
     selectedSquare = () # keep track of last click of user (row, col)
@@ -39,6 +40,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                if gameOver: return
                 location = pygame.mouse.get_pos() # location of click
                 col = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
@@ -82,8 +84,19 @@ def main():
             moveMade = False
             animate = False
 
-        clock.tick(MAX_FPS)
         drawGameState(screen, gs, validMoves, selectedSquare)
+
+        if gs.checkMate:
+            gameOver = True
+            if gs.whiteToMove:
+                drawText(screen, "Black wins by checkmate")
+            else: 
+                drawText(screen, "White wins by checkmate")
+        elif gs.staleMate:
+            gameOver = True
+            drawText(screen, "Game draw by stalemate")
+
+        clock.tick(MAX_FPS)
         pygame.display.flip()
 
 '''
@@ -158,6 +171,15 @@ def animateMove(move, screen, board, clock):
         screen.blit(IMAGES[move.pieceMoved], pygame.Rect(col * SQ_SIZE, row * SQ_SIZE, SQ_SIZE, SQ_SIZE))
         pygame.display.flip()
         clock.tick(60)
+
+'''
+Draw text to screen
+'''
+def drawText(screen, text):
+    font = pygame.font.SysFont("Helvetica", 32, True, False)
+    textObject = font.render(text, 0, pygame.Color('black'))
+    textLocation = pygame.Rect(0, 0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width() / 2, HEIGHT/2 - textObject.get_height() / 2)
+    screen.blit(textObject, textLocation)
 
 if __name__=="__main__":
     main()
