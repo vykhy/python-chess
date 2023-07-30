@@ -69,15 +69,36 @@ def main():
             moveMade = False
 
         clock.tick(MAX_FPS)
-        drawBoard(screen)
-        drawPieces(screen, gs.board)
+        drawGameState(screen, gs, validMoves, selectedSquare)
         pygame.display.flip()
+
+'''
+Highlight possible mnove squared
+'''
+def highlightSquares(screen, gameState, validMoves, sqSelected):
+    if sqSelected == ():
+        return
+    row, col = sqSelected
+    # check if selected square belongs to the correct color's turn
+    if gameState.board[row][col][0] == ('w' if gameState.whiteToMove else 'b'):
+        # highlight selected square
+        s = pygame.Surface((SQ_SIZE, SQ_SIZE))
+        s.set_alpha(100)
+        s.fill(pygame.Color('blue'))
+        screen.blit(s, (col * SQ_SIZE, row * SQ_SIZE))
+
+        # highlight moves
+        s.fill(pygame.Color('yellow'))
+        for move in validMoves:
+            if move.startRow == row and move.startCol == col:
+                screen.blit(s, (SQ_SIZE * move.endCol, SQ_SIZE * move.endRow))
 
 '''
 Responsible for all the graphics within current game state
 '''
-def drawGameState(screen, gs):
+def drawGameState(screen, gs, validMoves, sqSelected):
     drawBoard(screen)
+    highlightSquares(screen, gs, validMoves, sqSelected)
     drawPieces(screen, gs.board)
 
 '''Draw the squares on the board'''
